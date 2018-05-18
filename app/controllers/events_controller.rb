@@ -62,8 +62,17 @@ class EventsController < ApplicationController
   end
 
   def register
-    #o esto @event = Event.find(params[:id])
+    @user_of_event = @event.users
   end
+
+  def register_user
+    @event = Event.find(params[:id])
+    email = params[:email]
+    user = User.where(email: email).take
+    @event.user << user
+    redirect_to register_to_event_path(@event)
+  end
+
 
   private
     # Use callbacks to share common setup or constraints between actions.
@@ -75,4 +84,5 @@ class EventsController < ApplicationController
     def event_params
       params.require(:event).permit(:name, :start_date, :end_date, :max_students, :description)
     end
+
 end
